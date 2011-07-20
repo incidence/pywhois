@@ -55,6 +55,7 @@ class NICClient(object) :
     IANAHOST            = "whois.iana.org"
     DENICHOST           = "de.whois-servers.net"
     COMHOST             = "com.whois-servers.net"
+    FINICHOST           = "whois.ficora.fi"
     DEFAULT_PORT        = "nicname"
     WHOIS_SERVER_ID     = "Whois Server:"
     WHOIS_ORG_SERVER_ID = "Registrant Street1:Whois Server:"
@@ -102,6 +103,8 @@ class NICClient(object) :
         s.connect((hostname, 43))
         if (hostname == NICClient.DENICHOST):
             s.send("-T dn,ace -C UTF-8 " + query + "\r\n")
+        elif (hostname == NICClient.FINICHOST):
+            s.send(query + "\r\n")
         elif (hostname == NICClient.COMHOST):
             s.send("=" + query + "\r\n")
         else:
@@ -123,6 +126,8 @@ class NICClient(object) :
     
     def choose_server(self, domain):
         """Choose initial lookup NIC host"""
+        if (domain.endswith(".fi")):
+            return NICClient.FINICHOST
         if (domain.endswith("-NORID")):
             return NICClient.NORIDHOST
         pos = domain.rfind('.')
@@ -160,7 +165,7 @@ class NICClient(object) :
                 result = self.whois(query_arg, nichost, flags)           
         else:
             result = self.whois(query_arg, options['whoishost'], flags)
-            
+           
         return result
 #---- END OF NICClient class def ---------------------
     
