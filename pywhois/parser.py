@@ -416,6 +416,7 @@ class WhoisFi(WhoisEntry):
     """Whois parser for .fi domains
     """
     regex = {
+        'registrant_name':  'descr:\s*(.+)',
         'domain_name':      'domain:\s*(.+)',
         'status':           'status:\s*(.+)',
         'name_servers':     'nserver:\s*(.+)',
